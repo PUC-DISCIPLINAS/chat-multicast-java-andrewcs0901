@@ -11,7 +11,9 @@ public class GroupDAO implements IDAO<String, String> {
 
 	@Override
 	public List<String> getUsers(String key) {
-		return groups.get(key);
+		if (groups.containsKey(key))
+			return groups.get(key);
+		else throw new NullPointerException();
 	}
 
 	@Override

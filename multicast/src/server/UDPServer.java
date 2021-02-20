@@ -76,30 +76,53 @@ class UDPServer {
 			}
 		}).start();
 	}
-	
+
 	public void responseHandler(DatagramPacket request, String message) throws Exception {
 		String[] commandSplit = message.split(" ", 3);
-		switch(commandSplit[0]) {
+		String resStatus;
+		List<String> res = new ArrayList<String>();
+		switch (commandSplit[0]) {
 		case EAcceptedOptions.LIST_GROUPS:
 			response(request, groups.listAll(), EAcceptedOptions.LIST_GROUPS);
 			break;
-		case EAcceptedOptions.LIST_USERS: 
-			response(request, groups.getUsers(commandSplit[1]), EAcceptedOptions.LIST_USERS);
+		case EAcceptedOptions.LIST_USERS:
+			try {
+				res = groups.getUsers(commandSplit[1]);
+			} catch (NullPointerException e) {
+				res.add("Grupo não encontrado");
+			}
+			response(request, res, EAcceptedOptions.LIST_USERS);
 			break;
 		case EAcceptedOptions.CREATE:
 			String ip = MultiCastIpGenerator.nextIp();
 			response(request, groups.addGroup(ip), EAcceptedOptions.CREATE + " ip -> " + ip);
 			break;
 		case EAcceptedOptions.IN:
-			response(request, groups.addUser(commandSplit[1],commandSplit[2]), EAcceptedOptions.IN);
+			try {
+				res = groups.addUser(commandSplit[1], commandSplit[2]);
+				resStatus = EAcceptedOptions.IN;
+			} catch (NullPointerException e) {
+				res.add("Grupo não encontrado");
+				resStatus = EAcceptedOptions.INVALID;
+			}
+			response(request, res, resStatus);
 			break;
 		case EAcceptedOptions.LEAVE:
-			groups.deleteUser(commandSplit[1],commandSplit[2]);
-			response(request, new ArrayList<String>(), EAcceptedOptions.LEAVE);
+			try {
+				groups.deleteUser(commandSplit[1], commandSplit[2]);
+				res.add("Você saiu do grupo");
+				resStatus = EAcceptedOptions.LEAVE;
+			} catch (NullPointerException e) {
+				if (commandSplit[2].equals("null"))
+					res.add("Erro ao sair do grupo - você não ingressou em um grupo");
+				else
+					res.add("Grupo não encontrado");
+				resStatus = EAcceptedOptions.INVALID;
+			}
+			response(request, res, resStatus);
 			break;
 		default:
-			System.out.println(commandSplit[0]);
-			String resStatus = "/?".equals(commandSplit[0]) ? "comandos" : EAcceptedOptions.INVALID;
+			resStatus = "/?".equals(commandSplit[0]) ? "comandos" : EAcceptedOptions.INVALID;
 			List<String> validValues = Arrays.asList(EAcceptedOptions.values());
 			response(request, new ArrayList<String>(validValues), resStatus);
 		}

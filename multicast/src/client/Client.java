@@ -59,7 +59,6 @@ public class Client {
 						formatedMessage += " " + ip;
 						break;
 					case EAcceptedOptions.IN:
-						System.out.println(commandSplit.length);
 						if (commandSplit.length != 2) {
 							System.out.println("Código de grupo vazio");
 							return;
@@ -68,7 +67,13 @@ public class Client {
 						ip = commandSplit[1];
 						break;
 					case EAcceptedOptions.LEAVE:
+						if(mSocket.getInetAddress() != null)
 						formatedMessage += " " + userName + " " + ip;
+						else {
+							System.out.println("Você não pode sair do grupo pois você ainda não entrou em nenhum");
+							return;
+						}
+							
 						break;
 					}
 					messageOut = new Message(userName, formatedMessage);
@@ -95,24 +100,20 @@ public class Client {
 			case UDP_SOCKET:
 				DataCollection data = (DataCollection) objInput.readObject();
 				String type = data.getType();
-				if (type.equals(EAcceptedOptions.LIST_GROUPS) || type.equals(EAcceptedOptions.LIST_USERS)
-						|| type.equals(EAcceptedOptions.INVALID)) {
-					if (data.getData() != null && data.getData().size() > 0)
-						for (String i : data.getData())
-							System.out.println(i);
-					else
-						System.out.println("{ }");
-					break;
-				}
 				if (type.equals(EAcceptedOptions.IN)) {
 					System.out.println(data.getData());
 					joinGroup(ip);
-					return;
+					break;
 				}
 				if (type.equals(EAcceptedOptions.LEAVE)) {
 					leaveGroup();
 					break;
 				}
+				if (data.getData() != null && data.getData().size() > 0)
+					for (String i : data.getData())
+						System.out.println(i);
+				else
+					System.out.println("{ }");
 				break;
 			case MULTICAST_SOCKET:
 				Message msg = (Message) objInput.readObject();
@@ -131,7 +132,6 @@ public class Client {
 	public void joinGroup(String ip) throws UnknownHostException {
 		Client.ip = ip;
 		groupIp = InetAddress.getByName(ip);
-		System.out.println(groupIp.getHostName());
 		try {
 			mSocket.joinGroup(groupIp);
 			receiveMessages(mSocket);
