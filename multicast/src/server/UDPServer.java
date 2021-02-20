@@ -79,7 +79,6 @@ class UDPServer {
 	
 	public void responseHandler(DatagramPacket request, String message) throws Exception {
 		String[] commandSplit = message.split(" ", 3);
-		System.out.println("Test");
 		switch(commandSplit[0]) {
 		case EAcceptedOptions.LIST_GROUPS:
 			response(request, groups.listAll(), EAcceptedOptions.LIST_GROUPS);
