@@ -98,7 +98,7 @@ public class Client {
 
 				if (type.equals(EAcceptedOptions.LIST_GROUPS) || type.equals(EAcceptedOptions.LIST_USERS)
 						|| type.equals(EAcceptedOptions.INVALID)) {
-					if (data.getData().size() > 0)
+					if (data.getData() != null && data.getData().size() > 0)
 						for (String i : data.getData())
 							System.out.println(i);
 					else
