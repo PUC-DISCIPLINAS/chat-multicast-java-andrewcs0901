@@ -40,7 +40,7 @@ public class Client {
 	}
 
 	public void closeSocket() {
-		if(groupIp != null) {
+		if (groupIp != null) {
 			leaveGroup();
 		}
 		mSocket.close();
@@ -90,12 +90,11 @@ public class Client {
 
 		try (ByteArrayInputStream bInputStream = new ByteArrayInputStream(messageIn.getData());
 				ObjectInput objInput = new ObjectInputStream(bInputStream)) {
+			System.out.println("==================|Inicio Mensagem|=================");
 			switch (messageIn.getPort()) {
 			case UDP_SOCKET:
 				DataCollection data = (DataCollection) objInput.readObject();
 				String type = data.getType();
-				System.out.println("Response:" + type);
-
 				if (type.equals(EAcceptedOptions.LIST_GROUPS) || type.equals(EAcceptedOptions.LIST_USERS)
 						|| type.equals(EAcceptedOptions.INVALID)) {
 					if (data.getData() != null && data.getData().size() > 0)
@@ -103,7 +102,7 @@ public class Client {
 							System.out.println(i);
 					else
 						System.out.println("{ }");
-					return;
+					break;
 				}
 				if (type.equals(EAcceptedOptions.IN)) {
 					System.out.println(data.getData());
@@ -112,7 +111,7 @@ public class Client {
 				}
 				if (type.equals(EAcceptedOptions.LEAVE)) {
 					leaveGroup();
-					return;
+					break;
 				}
 				break;
 			case MULTICAST_SOCKET:
@@ -120,6 +119,7 @@ public class Client {
 				System.out.println(msg);
 				break;
 			}
+			System.out.println("==================|Fim Mensagem|=================");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

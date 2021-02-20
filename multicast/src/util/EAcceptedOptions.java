@@ -7,12 +7,12 @@ public class EAcceptedOptions {
 	public static final String CREATE = "/create";
 	public static final String IN = "/in";
 	public static final String LEAVE = "/leave";
-	public static final String INVALID = "comando invalido";
+	public static final String INVALID = "comandos";
 	
 	
 
 	public static String[] values() {
-		String[] val = {LIST_GROUPS,LIST_USERS, CREATE, IN, LEAVE};
+		String[] val = {LIST_GROUPS,LIST_USERS, CREATE, IN + " <ip>", LEAVE};
 		return val;
 	}
 }

@@ -98,8 +98,10 @@ class UDPServer {
 			response(request, new ArrayList<String>(), EAcceptedOptions.LEAVE);
 			break;
 		default:
+			System.out.println(commandSplit[0]);
+			String resStatus = "/?".equals(commandSplit[0]) ? "comandos" : EAcceptedOptions.INVALID;
 			List<String> validValues = Arrays.asList(EAcceptedOptions.values());
-			response(request, new ArrayList<String>(validValues), EAcceptedOptions.INVALID);
+			response(request, new ArrayList<String>(validValues), resStatus);
 		}
 	}
 
