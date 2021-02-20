@@ -40,7 +40,9 @@ public class Client {
 	}
 
 	public void closeSocket() {
-		leaveGroup();
+		if(groupIp != null) {
+			leaveGroup();
+		}
 		mSocket.close();
 	}
 
