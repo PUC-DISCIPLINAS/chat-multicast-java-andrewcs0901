@@ -18,7 +18,7 @@
 
 ## Instruções para execução
 
-  1. Realize a compilação dos arquivos .java via terminal `javac <nome do arquivo>` ou importe o arquivo via IDE;
+  1. Realize a compilação dos arquivos .java via terminal `javac <nome do arquivo>` ou importe o projeto via IDE;
 
   2. (Recomendado) Para a execução simultânea do arquivos, abra via terminal na pasta que contenham os arquivos compilados .class `java <server.MainServer>` - servidor, `java <client.App>` - cliente.
 
