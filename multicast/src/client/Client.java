@@ -67,13 +67,13 @@ public class Client {
 						ip = commandSplit[1];
 						break;
 					case EAcceptedOptions.LEAVE:
-						if(mSocket.getInetAddress() != null)
-						formatedMessage += " " + userName + " " + ip;
+						if (!ip.isEmpty())
+							formatedMessage += " " + userName + " " + ip;
 						else {
 							System.out.println("Você não pode sair do grupo pois você ainda não entrou em nenhum");
 							return;
 						}
-							
+
 						break;
 					}
 					messageOut = new Message(userName, formatedMessage);
@@ -142,7 +142,6 @@ public class Client {
 
 	public void leaveGroup() {
 		try {
-			handleSendMessage(EAcceptedOptions.LEAVE);
 			mSocket.leaveGroup(groupIp);
 		} catch (IOException e) {
 			e.printStackTrace();

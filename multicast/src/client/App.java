@@ -37,6 +37,7 @@ public class App {
 		} finally {
 			scanner.close();
 			if (client != null) {
+				client.handleSendMessage("/leave");
 				client.closeSocket();
 			}
 		}
@@ -44,13 +45,17 @@ public class App {
 
 	private static void chatInterface() {
 		res = "";
-		System.out.println("Digite /?, para conhecer os comandos disponíveis ou apenas comece o bate-papo");
+		System.out.println("Digite /?, para conhecer os comandos disponíveis");
 		while (true) {
 			res = scanner.nextLine();
 			if (!res.equalsIgnoreCase("/exit"))
 				client.handleSendMessage(res);
 			else
+			{
+				client.handleSendMessage("/leave");
 				return;
+			}
+				
 		}
 	}
 }
